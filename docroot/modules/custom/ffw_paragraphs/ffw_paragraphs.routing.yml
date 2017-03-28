@@ -1,0 +1,7 @@
+ffw_paragraphs.admin_settings:
+  path: '/admin/config/services/marketo'
+  defaults:
+    _form: '\Drupal\ffw_paragraphs\Form\SettingsForm'
+    _title: 'Marketo settings'
+  requirements:
+    _permission: 'administer site configuration'

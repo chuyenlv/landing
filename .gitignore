@@ -1,0 +1,25 @@
+# Ignore configuration files that may contain sensitive information.
+docroot/sites/*/*settings*.php
+docroot/sites/*/services.yml
+!docroot/sites/*/default.settings.local.php
+docroot/sites/*services.yml
+docroot/sites/example*
+docroot/.*
+docroot/*.txt
+docroot/*.php
+docroot/*.config
+
+# Ignore paths that contain generated content.
+docroot/sites/*/files
+docroot/sites/*/private
+
+docroot/core
+docroot/includes
+docroot/libraries
+docroot/misc
+docroot/modules/*
+!docroot/modules/custom
+docroot/profiles
+docroot/themes/*
+!docroot/themes/custom
+vendor
