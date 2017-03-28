@@ -1,0 +1,60 @@
+<?php
+/**
+ * @file ffw_paragraphs.module
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function ffw_paragraphs_entity_extra_field_info() {
+  $extra = array();
+
+  $extra['paragraph']['marketo_form']['display']['form'] = array(
+    'label' => t('Form'),
+    'description' => t('Display form marketo'),
+    'weight' => 100,
+    'visible' => TRUE,
+  );
+
+  return $extra;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ffw_paragraphs_theme($existing, $type, $theme, $path) {
+  return array(
+    'marketo_form' => array(
+      'variables' => array(
+        'base_url' => NULL,
+        'munchkin_id' => NULL,
+        'form_id' => NULL
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function ffw_paragraphs_paragraph_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode, $langcode) {
+  if ($display->getComponent('form')) {
+    $munchkinId = $entity->get('field_munchkin_id')->getValue();
+    $formId = $entity->get('field_form_id')->getValue();
+
+    if (!empty($munchkinId) && !empty($formId)) {
+      $config = \Drupal::config('ffw_paragraphs.settings');
+      $baseUrl = $config->get('base_url');
+
+      $build['form'] = [
+        '#theme' => 'marketo_form',
+        '#base_url' => $baseUrl,
+        '#munchkin_id' => $munchkinId[0]['value'],
+        '#form_id' => $formId[0]['value'],
+      ];
+    }
+  }
+}
