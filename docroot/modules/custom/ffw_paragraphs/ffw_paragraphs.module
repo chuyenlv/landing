@@ -5,6 +5,7 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_entity_extra_field_info().
@@ -31,7 +32,8 @@ function ffw_paragraphs_theme($existing, $type, $theme, $path) {
       'variables' => array(
         'base_url' => NULL,
         'munchkin_id' => NULL,
-        'form_id' => NULL
+        'form_id' => NULL,
+        'redirect' => NULL
       ),
     ),
   );
@@ -48,12 +50,20 @@ function ffw_paragraphs_paragraph_view(array &$build, EntityInterface $entity, E
     if (!empty($munchkinId) && !empty($formId)) {
       $config = \Drupal::config('ffw_paragraphs.settings');
       $baseUrl = $config->get('base_url');
+      $url = $entity->get('field_url')->getValue();
+      if (!empty($url)) {
+        $url = Url::fromUri($url[0]['uri']);
+      }
+      else {
+        $url = '';
+      }
 
       $build['form'] = [
         '#theme' => 'marketo_form',
         '#base_url' => $baseUrl,
         '#munchkin_id' => $munchkinId[0]['value'],
         '#form_id' => $formId[0]['value'],
+        '#redirect' => $url,
       ];
     }
   }

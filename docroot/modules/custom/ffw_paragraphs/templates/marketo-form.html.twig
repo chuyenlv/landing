@@ -1,5 +1,17 @@
 <script src="//{{ base_url }}/js/forms2/js/forms2.js"></script>
 <form id="mktoForm_{{ form_id }}"></form>
-<script>
-  MktoForms2.loadForm("//{{ base_url }}", "{{ munchkin_id }}", {{ form_id }});
-</script>
+
+{% if redirect %}
+  <script>
+    MktoForms2.loadForm("//{{ base_url }}", "{{ munchkin_id }}", {{ form_id }}, function(form){
+      form.onSuccess(function(values, followUpUrl){
+        location.href = "{{ redirect }}";
+        return false;
+      });
+    });
+  </script>
+{% else %}
+  <script>
+    MktoForms2.loadForm("//{{ base_url }}", "{{ munchkin_id }}", {{ form_id }});
+  </script>
+{% endif %}
